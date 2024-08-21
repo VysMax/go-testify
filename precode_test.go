@@ -18,7 +18,7 @@ func TestMainHandlerIfStatusOk(t *testing.T) {
 	handler.ServeHTTP(responseRecorder, req)
 
 	require.Equal(t, http.StatusOK, responseRecorder.Code)
-	require.NotEmpty(t, responseRecorder.Body)
+	assert.NotEmpty(t, responseRecorder.Body)
 }
 
 func TestMainHandlerWhenCityIsMissing(t *testing.T) {
@@ -28,7 +28,7 @@ func TestMainHandlerWhenCityIsMissing(t *testing.T) {
 	handler := http.HandlerFunc(mainHandle)
 	handler.ServeHTTP(responseRecorder, req)
 
-	assert.Equal(t, http.StatusBadRequest, responseRecorder.Code)
+	require.Equal(t, http.StatusBadRequest, responseRecorder.Code)
 	assert.Equal(t, "wrong city value", responseRecorder.Body.String())
 }
 
@@ -41,6 +41,7 @@ func TestMainHandlerWhenCountMoreThanTotal(t *testing.T) {
 	handler.ServeHTTP(responseRecorder, req)
 
 	// здесь нужно добавить необходимые проверки
+	require.Equal(t, http.StatusOK, responseRecorder.Code)
 	responseSlice := strings.Split(responseRecorder.Body.String(), ",")
 	assert.Len(t, responseSlice, totalCount)
 }
